@@ -1,0 +1,45 @@
+Node.js & Npm
+
+--------------------------------------------------------
+
+nodemon
+
+- Role : Automatically restarts server on file changes.
+- Install globally : npm install -g nodemon
+- Use : Avoids manual server restart during development.
+
+package.json
+
+- Role : Stores project metadata, dependencies, and scripts.
+-->> Key sections :
+
+  >>  "dependencies" -> Packages needed to run the app.
+  >>  "devDependencies" -> Packages needed only for development.
+  >>  "scripts" -> Custom commands, e.g., "start": "node app.js".
+
+Installing packages
+
+-  Regular dependency : npm install <package-name> (adds to "dependencies")
+-  Dev dependency : npm install <package-name> --save-dev (adds to "devDependencies")
+-  Production install : npm install --production (installs only "dependencies")
+-  Uninstall : npm uninstall <package-name>
+
+package.json default fields
+
+-  Created by npm init : name, version, main, scripts, author, license
+-  Optional : repository, devDependencies, keywords
+
+--------------------------------------------------------
+
+MCQ Answers
+
+1.   Purpose of nodemon: Automatically restarts server on file changes.
+2.   Install nodemon globally: npm install -g nodemon
+3.   Role of package.json: Manages project metadata, dependencies, and scripts.
+4.   Scripts section in package.json: "scripts"
+5.   Install regular dependency: npm install <package-name>
+6.   Dependencies vs devDependencies: dependencies = run-time, devDependencies = development only
+7.   npm install --production: installs only dependencies
+8.   Install dev dependency: npm install <package-name> --save-dev
+9.   Uninstall package: npm uninstall <package-name>
+10.  Field NOT created by default: repository
