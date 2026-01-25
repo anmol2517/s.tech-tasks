@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2 id="n"></h2>
+<p id="p"></p>
+<canvas id="g"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const i=new URLSearchParams(location.search).get("id")
+fetch("http://localhost:4000/api/players/"+i)
+.then(r=>r.json()).then(d=>{
+n.innerText=d.name
+p.innerText=d.profile
+new Chart(g,{type:"bar",data:{labels:["Matches","Runs","Centuries"],datasets:[{data:[d.matches,d.runs,d.centuries]}]}})
+})
+</script>
+</body>
+</html>

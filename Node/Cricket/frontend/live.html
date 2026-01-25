@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2 id="m"></h2>
+<h3 id="s"></h3>
+<p id="o"></p>
+<script>
+fetch("http://localhost:4000/api/live")
+.then(r=>r.json()).then(d=>{
+m.innerText=d.team1+" vs "+d.team2
+s.innerText=d.score1+" | "+d.score2
+o.innerText=d.overs
+})
+</script>
+</body>
+</html>

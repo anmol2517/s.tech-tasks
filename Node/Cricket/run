@@ -1,0 +1,11 @@
+mysql -u root -p
+
+Scar2511@#
+
+source sql/schema.sql
+
+cd backend
+
+npm install
+
+npm start
