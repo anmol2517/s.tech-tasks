@@ -4,7 +4,7 @@ const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize(
   'sequelize_db',
   'root',
-  'your_pass',
+  'Scar2511@#',
   {
     host: 'localhost',
     dialect: 'mysql'
@@ -27,3 +27,4 @@ const User = sequelize.define('User', {
 });
 
 module.exports = User;
+
