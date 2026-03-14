@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories - Expense Tracker</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="app-page">
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Expense Tracker</h2>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/dashboard.html" class="nav-link" data-page="dashboard">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/expenses.html" class="nav-link" data-page="expenses">
+          <span class="nav-icon">💳</span>
+          <span>Expenses</span>
+        </a>
+        <a href="/categories.html" class="nav-link active" data-page="categories">
+          <span class="nav-icon">🏷️</span>
+          <span>Categories</span>
+        </a>
+        <a href="/budgets.html" class="nav-link" data-page="budgets">
+          <span class="nav-icon">💰</span>
+          <span>Budgets</span>
+        </a>
+        <a href="/reports.html" class="nav-link" data-page="reports">
+          <span class="nav-icon">📈</span>
+          <span>Reports</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <div class="user-details">
+            <p class="user-name" id="userName">User</p>
+            <p class="user-email" id="userEmail">email@example.com</p>
+          </div>
+        </div>
+        <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="dashboard-header">
+        <h1>Categories</h1>
+        <div class="dashboard-actions">
+          <button class="btn btn-primary" id="addCategoryBtn">+ Add Category</button>
+        </div>
+      </div>
+
+      <!-- Categories Grid -->
+      <div class="section">
+        <div class="categories-grid" id="categoriesGrid">
+          <p class="text-center">Loading categories...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Category Modal -->
+  <div class="modal" id="categoryModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="categoryModalTitle">Add Category</h2>
+        <button class="modal-close" id="closeCategoryModal">&times;</button>
+      </div>
+      <form id="categoryForm" class="form">
+        <div class="form-group">
+          <label for="categoryName">Category Name</label>
+          <input type="text" id="categoryName" placeholder="e.g., Food, Transportation" required>
+        </div>
+        <div class="form-group">
+          <label for="categoryColor">Color</label>
+          <div class="color-picker">
+            <input type="color" id="categoryColor" value="#3498db">
+            <span id="colorPreview" class="color-preview" style="background-color: #3498db;"></span>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancelCategoryBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/categories.js"></script>
+</body>
+</html>
