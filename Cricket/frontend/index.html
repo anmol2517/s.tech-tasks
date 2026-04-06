@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cricket Careers</title>
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:#fff}
+header{background:#020617;padding:15px;text-align:center;font-size:24px;font-weight:bold}
+.container{padding:20px}
+input,select{padding:8px;border:none;border-radius:4px;margin:4px}
+button{padding:8px 12px;border:none;border-radius:4px;background:#38bdf8;color:#000;font-weight:bold;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px;margin-top:20px}
+.card{background:#020617;padding:15px;border-radius:8px;box-shadow:0 0 10px #000}
+.card h3{margin:0}
+.badge{background:#22c55e;color:#000;padding:3px 8px;border-radius:20px;font-size:12px}
+.actions{margin-top:10px}
+.actions button{margin-right:5px}
+form{background:#020617;padding:15px;border-radius:8px;margin-bottom:20px}
+</style>
+</head>
+
+<body>
+<header>Cricket Careers Dashboard</header>
+
+<div class="container">
+
+<form onsubmit="addPlayer(event)">
+<input id="name" placeholder="Name" required>
+<select id="country">
+<option>India</option>
+<option>England</option>
+<option>Australia</option>
+<option>New Zealand</option>
+</select>
+<input id="matches" placeholder="Matches" type="number" required>
+<input id="runs" placeholder="Runs" type="number" required>
+<input id="centuries" placeholder="Centuries" type="number" required>
+<button>Add Player</button>
+</form>
+
+<input id="search" placeholder="Search player">
+<button onclick="load()">Search</button>
+
+<div class="grid" id="cards"></div>
+
+</div>
+
+<script>
+let editId=null
+
+function load(){
+const q=search.value
+const url=q?`http://localhost:3000/players/search/${q}`:`http://localhost:3000/players`
+fetch(url).then(r=>r.json()).then(d=>{
+cards.innerHTML=d.map(p=>`
+<div class="card">
+<h3>${p.name}</h3>
+<span class="badge">${p.country}</span>
+<p>Matches: ${p.matches}</p>
+<p>Runs: ${p.runs}</p>
+<p>Centuries: ${p.centuries}</p>
+<div class="actions">
+<button onclick="edit(${p.id},${p.matches},${p.runs},${p.centuries})">Edit</button>
+<button onclick="del(${p.id})">Delete</button>
+</div>
+</div>
+`).join("")
+})
+}
+
+function addPlayer(e){
+e.preventDefault()
+if(editId){
+fetch(`http://localhost:3000/players/${editId}`,{
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+matches:matches.value,
+runs:runs.value,
+centuries:centuries.value
+})
+}).then(()=>{editId=null;load()})
+}else{
+fetch("http://localhost:3000/players",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+name:name.value,
+country:country.value,
+matches:matches.value,
+runs:runs.value,
+centuries:centuries.value
+})
+}).then(()=>load())
+}
+e.target.reset()
+}
+
+function edit(id,m,r,c){
+editId=id
+matches.value=m
+runs.value=r
+centuries.value=c
+}
+
+function del(id){
+fetch(`http://localhost:3000/players/${id}`,{method:"DELETE"}).then(()=>load())
+}
+
+load()
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense Tracker</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    h1 { text-align: center; color: #333; margin-bottom: 8px; font-size: 28px; }
+    p.subtitle { text-align: center; color: #888; margin-bottom: 28px; font-size: 14px; }
+    .tabs { display: flex; margin-bottom: 28px; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; }
+    .tab {
+      flex: 1; padding: 12px; text-align: center; cursor: pointer;
+      background: #f5f5f5; font-weight: 600; color: #666; transition: all 0.2s;
+    }
+    .tab.active { background: #667eea; color: white; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 600; }
+    input {
+      width: 100%; padding: 12px 16px; border: 1.5px solid #e0e0e0;
+      border-radius: 8px; font-size: 15px; outline: none; transition: border 0.2s;
+    }
+    input:focus { border-color: #667eea; }
+    button.btn {
+      width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 8px; font-size: 16px;
+      font-weight: 600; cursor: pointer; margin-top: 8px; transition: opacity 0.2s;
+    }
+    button.btn:hover { opacity: 0.9; }
+    #message { text-align: center; margin-top: 14px; font-size: 14px; }
+    .err { color: #e53935; }
+    .ok { color: #43a047; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💰 Expense Tracker</h1>
+    <p class="subtitle">Track your expenses smartly</p>
+
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('login')">Login</div>
+      <div class="tab" onclick="showTab('signup')">Sign Up</div>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" />
+      </div>
+      <button class="btn" onclick="login()">Login</button>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" style="display:none;">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="signupName" placeholder="Your Name" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="••••••••" />
+      </div>
+      <button class="btn" onclick="signup()">Create Account</button>
+    </div>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+      document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+      document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup'));
+      });
+    }
+
+    function showMsg(msg, type) {
+      const el = document.getElementById('message');
+      el.textContent = msg;
+      el.className = type === 'err' ? 'err' : 'ok';
+    }
+
+    async function login() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!email || !password) return showMsg('Fill all fields', 'err');
+      const res = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('name', data.name);
+        localStorage.setItem('isPremium', data.isPremium);
+        window.location.href = '/dashboard';
+      } else {
+        showMsg(data.message, 'err');
+      }
+    }
+
+    async function signup() {
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      if (!name || !email || !password) return showMsg('Fill all fields', 'err');
+      const res = await fetch('/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showMsg('Account created! Please login.', 'ok');
+        showTab('login');
+      } else {
+        showMsg(data.message, 'err');
+      }
+    }
+  </script>
+</body>
+</html>

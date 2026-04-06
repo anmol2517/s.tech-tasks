@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Expense Tracker</title>
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+    #premiumBanner {
+      display: none;
+      background: linear-gradient(135deg, #f6a623, #e8621a);
+      color: white; text-align: center;
+      padding: 14px 20px; font-size: 18px; font-weight: 700;
+      letter-spacing: 0.3px; box-shadow: 0 2px 10px rgba(232,98,26,0.4);
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 0 28px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .logo { color: white; font-size: 22px; font-weight: 700; }
+    .navbar .nav-right { display: flex; align-items: center; gap: 14px; }
+    .navbar .user-name { color: rgba(255,255,255,0.9); font-size: 14px; }
+    .premium-badge {
+      background: linear-gradient(135deg, #f6a623, #e8621a);
+      color: white; font-size: 12px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; display: none;
+    }
+    #buyPremiumBtn {
+      background: linear-gradient(135deg, #f6a623, #e8621a);
+      color: white; border: none; padding: 10px 20px;
+      border-radius: 25px; font-size: 14px; font-weight: 600;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(232,98,26,0.4);
+      transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap;
+    }
+    #buyPremiumBtn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,98,26,0.5); }
+    #buyPremiumBtn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .logout-btn {
+      background: rgba(255,255,255,0.2); color: white;
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 8px 16px; border-radius: 20px; font-size: 13px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.3); }
+
+    .main { max-width: 860px; margin: 36px auto; padding: 0 20px; }
+
+    .card {
+      background: white; border-radius: 16px; padding: 28px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07); margin-bottom: 24px;
+    }
+    .card h2 { color: #333; font-size: 20px; margin-bottom: 20px; }
+
+    .form-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .form-group { flex: 1; min-width: 140px; }
+    .form-group label { display: block; margin-bottom: 6px; color: #666; font-size: 13px; font-weight: 600; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 10px 14px; border: 1.5px solid #e0e0e0;
+      border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: #667eea; }
+    .add-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; padding: 10px 28px; border-radius: 8px;
+      font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 20px;
+      transition: opacity 0.2s;
+    }
+    .add-btn:hover { opacity: 0.9; }
+
+    .expense-list { list-style: none; }
+    .expense-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-radius: 10px; margin-bottom: 10px;
+      background: #f8f9ff; border: 1px solid #eef0ff; transition: transform 0.15s;
+    }
+    .expense-item:hover { transform: translateX(3px); }
+    .expense-info { display: flex; flex-direction: column; gap: 3px; }
+    .expense-desc { font-weight: 600; color: #333; font-size: 15px; }
+    .expense-cat { font-size: 12px; color: #888; }
+    .expense-amount { font-weight: 700; color: #667eea; font-size: 18px; }
+    .del-btn {
+      background: #ffe5e5; color: #e53935; border: none; padding: 6px 14px;
+      border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+    }
+    .del-btn:hover { background: #ffcdd2; }
+    .no-expense { text-align: center; color: #aaa; padding: 28px 0; font-size: 15px; }
+
+    #leaderboardCard { display: none; }
+    .leaderboard-table { width: 100%; border-collapse: collapse; }
+    .leaderboard-table thead tr {
+      background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+    }
+    .leaderboard-table th, .leaderboard-table td { padding: 13px 18px; text-align: left; font-size: 14px; }
+    .leaderboard-table th { font-weight: 700; }
+    .leaderboard-table tbody tr:nth-child(even) { background: #f8f9ff; }
+    .leaderboard-table tbody tr:hover { background: #eef0ff; }
+    .leaderboard-table th:first-child, .leaderboard-table td:first-child { width: 60px; text-align: center; }
+    .amount-col { font-weight: 700; color: #667eea; }
+
+    .toast {
+      position: fixed; top: 80px; right: 24px; z-index: 9999;
+      padding: 16px 22px; border-radius: 12px; font-size: 15px; font-weight: 600;
+      max-width: 380px; box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+      display: flex; align-items: center; gap: 12px; animation: slideIn 0.3s ease;
+    }
+    .toast.success { background: #e8f5e9; border: 2px solid #43a047; color: #1b5e20; }
+    .toast.error { background: #ffebee; border: 2px solid #e53935; color: #b71c1c; }
+    .toast .close { cursor: pointer; font-size: 18px; margin-left: auto; }
+    @keyframes slideIn { from { transform: translateX(120px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+<div id="premiumBanner">⭐ You are a premium user now</div>
+
+<nav class="navbar">
+  <div class="logo">💰 Expense Tracker</div>
+  <div class="nav-right">
+    <span class="user-name" id="userName"></span>
+    <span class="premium-badge" id="premiumBadge">⭐ PREMIUM</span>
+    <button id="buyPremiumBtn" onclick="buyPremium()">⭐ Buy Premium Membership</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <div class="card">
+    <h2>➕ Add Expense</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount (₹)</label>
+        <input type="number" id="amount" placeholder="500" />
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" id="description" placeholder="Groceries..." />
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="category">
+          <option>Food</option>
+          <option>Travel</option>
+          <option>Shopping</option>
+          <option>Entertainment</option>
+          <option>Health</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addExpense()">Add Expense</button>
+  </div>
+
+  <div class="card">
+    <h2>📋 My Expenses</h2>
+    <ul class="expense-list" id="expenseList">
+      <li class="no-expense">Loading...</li>
+    </ul>
+  </div>
+
+  <div class="card" id="leaderboardCard">
+    <h2>🏆 Leaderboard — Top Spenders</h2>
+    <table class="leaderboard-table">
+      <thead>
+        <tr><th>Rank</th><th>Name</th><th>Total Spent (₹)</th></tr>
+      </thead>
+      <tbody id="leaderboardBody">
+        <tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa;">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  const token = localStorage.getItem('token');
+  if (!token) window.location.href = '/';
+
+  const cashfree = Cashfree({ mode: 'sandbox' }); // change to 'production' when live
+
+  window.onload = async () => {
+    try {
+      // Always hit backend — isPremium comes from DB, not localStorage
+      const res = await fetch('/auth/me', { headers: { Authorization: token } });
+      if (!res.ok) { logout(); return; }
+      const user = await res.json();
+
+      localStorage.setItem('name', user.name);
+      localStorage.setItem('isPremium', user.isPremium);
+
+      document.getElementById('userName').textContent = '👤 ' + user.name;
+
+      if (user.isPremium) setPremiumUI();
+    } catch (e) { logout(); }
+
+    loadExpenses();
+  };
+
+  function setPremiumUI() {
+    document.getElementById('premiumBanner').style.display = 'block';
+    document.getElementById('buyPremiumBtn').style.display = 'none';
+    document.getElementById('premiumBadge').style.display = 'inline-block';
+    document.getElementById('leaderboardCard').style.display = 'block';
+    loadLeaderboard();
+  }
+
+  async function loadExpenses() {
+    const res = await fetch('/expense', { headers: { Authorization: token } });
+    const data = await res.json();
+    const list = document.getElementById('expenseList');
+    if (!data.length) {
+      list.innerHTML = '<li class="no-expense">No expenses yet. Add one above!</li>';
+      return;
+    }
+    list.innerHTML = data.map(e => `
+      <li class="expense-item">
+        <div class="expense-info">
+          <span class="expense-desc">${e.description}</span>
+          <span class="expense-cat">${e.category}</span>
+        </div>
+        <span class="expense-amount">₹${e.amount}</span>
+        <button class="del-btn" onclick="deleteExpense(${e.id})">Delete</button>
+      </li>
+    `).join('');
+  }
+
+  async function addExpense() {
+    const amount = document.getElementById('amount').value;
+    const description = document.getElementById('description').value.trim();
+    const category = document.getElementById('category').value;
+    if (!amount || !description) return showToast('Fill all fields', 'error');
+    const res = await fetch('/expense', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
+      body: JSON.stringify({ amount, description, category }),
+    });
+    if (res.ok) {
+      document.getElementById('amount').value = '';
+      document.getElementById('description').value = '';
+      loadExpenses();
+      if (localStorage.getItem('isPremium') === 'true') loadLeaderboard();
+    }
+  }
+
+  async function deleteExpense(id) {
+    await fetch('/expense/' + id, { method: 'DELETE', headers: { Authorization: token } });
+    loadExpenses();
+    if (localStorage.getItem('isPremium') === 'true') loadLeaderboard();
+  }
+
+  async function loadLeaderboard() {
+    const res = await fetch('/leaderboard', { headers: { Authorization: token } });
+    if (!res.ok) return;
+    const data = await res.json();
+    const medals = ['🥇', '🥈', '🥉'];
+    const tbody = document.getElementById('leaderboardBody');
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:20px;color:#aaa;">No data yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.map((row, i) => `
+      <tr>
+        <td style="font-size:${i < 3 ? '20px' : '14px'}">${medals[i] || row.rank}</td>
+        <td>${row.name}</td>
+        <td class="amount-col">₹${row.totalExpense}</td>
+      </tr>
+    `).join('');
+  }
+
+  async function buyPremium() {
+    const btn = document.getElementById('buyPremiumBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Processing...';
+    try {
+      const orderRes = await fetch('/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+      });
+      if (!orderRes.ok) throw new Error('Order creation failed');
+      const { orderId, paymentSessionId } = await orderRes.json();
+
+      cashfree.checkout({ paymentSessionId, redirectTarget: '_modal' }).then(async (result) => {
+        if (result.error) {
+          await verifyPayment(orderId);
+          showToast('TRANSACTION FAILED', 'error');
+          resetBtn();
+          return;
+        }
+        const status = await verifyPayment(orderId);
+        if (status === 'SUCCESSFUL') {
+          localStorage.setItem('isPremium', 'true');
+          showToast('Transaction Successful! You are now a Premium Member 🎉', 'success');
+          setPremiumUI();
+        } else {
+          showToast('TRANSACTION FAILED', 'error');
+        }
+        resetBtn();
+      });
+    } catch (err) {
+      showToast('TRANSACTION FAILED', 'error');
+      resetBtn();
+    }
+  }
+
+  async function verifyPayment(orderId) {
+    const res = await fetch('/payment/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: token },
+      body: JSON.stringify({ orderId }),
+    });
+    const data = await res.json();
+    return data.status;
+  }
+
+  function resetBtn() {
+    const btn = document.getElementById('buyPremiumBtn');
+    btn.disabled = false;
+    btn.textContent = '⭐ Buy Premium Membership';
+  }
+
+  function showToast(message, type) {
+    const existing = document.getElementById('mainToast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'mainToast';
+    toast.className = 'toast ' + type;
+    toast.innerHTML = `<span>${message}</span><span class="close" onclick="this.parentElement.remove()">✕</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast && toast.remove(), 5000);
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/';
+  }
+</script>
+</body>
+</html>

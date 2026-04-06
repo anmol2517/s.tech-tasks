@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
+
+    <h3>Total Expense: ₹ <%= total %></h3>
+
+    <a href="/add">Add Expense</a>
+
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+
+      <% expenses.forEach(exp => { %>
+        <tr>
+          <td><%= exp.title %></td>
+          <td>₹ <%= exp.amount %></td>
+          <td><%= exp.category %></td>
+          <td><%= exp.date.toDateString() %></td>
+          <td>
+            <a href="/edit/<%= exp._id %>">Edit</a>
+            &nbsp;
+            <a class="action-btn" href="/delete/<%= exp._id %>">Delete</a>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
+</body>
+</html>
