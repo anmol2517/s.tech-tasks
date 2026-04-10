@@ -1,0 +1,201 @@
+================================================================================
+                    MERN AUTH APP - EXACT COMMANDS TO RUN
+================================================================================
+
+BEFORE YOU START:
+- Make sure MongoDB is running (local or Atlas)
+- Have Node.js installed (check: node --version)
+- Extract this ZIP file completely
+
+================================================================================
+                            STEP 1: BACKEND SETUP
+================================================================================
+
+Open Terminal 1 and run these commands:
+
+  cd backend
+  npm install
+  npm start
+
+Expected output:
+  > auth-backend@1.0.0 start
+  > node server.js
+  
+  MongoDB connected successfully
+  Server running on port 5000
+
+If you see this, Backend is READY!
+
+================================================================================
+                           STEP 2: FRONTEND SETUP
+================================================================================
+
+Open a NEW Terminal (Terminal 2) and run these commands:
+
+  cd frontend
+  npm install
+  npm run dev
+
+Expected output:
+  VITE v5.0.0  ready in 123 ms
+  ➜  Local:   http://localhost:3000/
+  ➜  press h to show help
+
+If you see this, Frontend is READY!
+
+================================================================================
+                            STEP 3: OPEN IN BROWSER
+================================================================================
+
+Go to:  http://localhost:3000
+
+You should see the Login page!
+
+================================================================================
+                          TESTING THE APPLICATION
+================================================================================
+
+TEST SIGNUP:
+1. On login page, click "Sign Up"
+2. Fill in the form:
+   - Name: Test User
+   - Email: test@example.com
+   - Phone: 9876543210
+   - Password: test123
+3. Click "Sign Up" button
+4. You'll be redirected to Dashboard
+
+TEST LOGIN (after logout):
+1. On login page, enter:
+   - Email or Phone: test@example.com (or 9876543210)
+   - Password: test123
+2. Click "Login" button
+3. You should see Dashboard with your info
+
+TEST LOGOUT:
+1. On Dashboard, click "Logout" button
+2. You'll return to login page
+
+================================================================================
+                         STOPPING THE SERVERS
+================================================================================
+
+To stop Backend (Terminal 1):
+  Press: Ctrl + C
+
+To stop Frontend (Terminal 2):
+  Press: Ctrl + C
+
+MongoDB (if running locally):
+  - Usually runs as a service, no need to stop
+
+================================================================================
+                       TROUBLESHOOTING COMMANDS
+================================================================================
+
+1. If "Port 5000 already in use":
+   
+   On Windows:
+     netstat -ano | findstr :5000
+     taskkill /PID [PID_NUMBER] /F
+   
+   On Mac/Linux:
+     lsof -ti:5000 | xargs kill -9
+
+2. If Node/npm command not found:
+   - Install Node.js from https://nodejs.org/
+   - Restart terminal
+
+3. If MongoDB won't connect:
+   - Start MongoDB service (Windows/Mac/Linux)
+   - Or update MONGODB_URI in backend/.env to Atlas URL
+
+4. If frontend shows blank page:
+   - Hard refresh: Ctrl + Shift + R (or Cmd + Shift + R on Mac)
+   - Wait 30 seconds for Vite to compile
+
+5. Clear all data (if needed):
+   
+   Browser LocalStorage:
+     - Open DevTools (F12)
+     - Go to Application → LocalStorage
+     - Click http://localhost:3000
+     - Delete all entries
+
+================================================================================
+                         USEFUL DEVELOPMENT COMMANDS
+================================================================================
+
+Install only (without starting):
+  cd backend && npm install
+  cd frontend && npm install
+
+Build frontend for production:
+  cd frontend && npm run build
+
+Check if ports are in use:
+  # Windows
+  netstat -ano | findstr :5000
+  netstat -ano | findstr :3000
+  
+  # Mac/Linux
+  lsof -i :5000
+  lsof -i :3000
+
+Check Node version:
+  node --version
+
+Check npm version:
+  npm --version
+
+================================================================================
+                          CHECKING IF EVERYTHING WORKS
+================================================================================
+
+Visit these URLs and check:
+
+1. Frontend is running:
+   → http://localhost:3000
+   Should show Login page
+
+2. Backend is running:
+   → http://localhost:5000/api/health
+   Should return JSON: { "message": "Server is running" }
+
+3. MongoDB is connected:
+   Check backend terminal for: "MongoDB connected successfully"
+
+If all three are working, you're GOOD TO GO!
+
+================================================================================
+                      WHAT PORTS ARE BEING USED
+================================================================================
+
+Frontend:  http://localhost:3000  (React Vite dev server)
+Backend:   http://localhost:5000  (Express API server)
+MongoDB:   localhost:27017        (Database server)
+
+Make sure these ports are free or adjust in .env files
+
+================================================================================
+                         PROJECT STRUCTURE REMINDER
+================================================================================
+
+mern-auth/
+├── backend/           ← Run "cd backend && npm install && npm start"
+├── frontend/          ← Run "cd frontend && npm install && npm run dev"
+├── README.md          ← Full documentation
+├── QUICKSTART.md      ← Fast setup (5 mins)
+└── COMMANDS.txt       ← This file
+
+================================================================================
+                              YOU'RE ALL SET!
+================================================================================
+
+If you see login page at http://localhost:3000 with both servers running,
+everything is working perfectly!
+
+Questions? Check README.md for detailed documentation.
+
+Good luck! 🚀
+================================================================================
