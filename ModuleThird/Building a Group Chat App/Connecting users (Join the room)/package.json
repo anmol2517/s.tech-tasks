@@ -1,0 +1,15 @@
+{
+  "name": "mern-join-room-chat",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install-server": "npm install --prefix server",
+    "install-client": "npm install --prefix client",
+    "install-all": "npm run install-server && npm run install-client",
+    "dev-server": "npm start --prefix server",
+    "dev-client": "npm run dev --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.2"
+  }
+}

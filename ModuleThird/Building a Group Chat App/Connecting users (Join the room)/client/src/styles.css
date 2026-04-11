@@ -1,0 +1,154 @@
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.app-shell {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  color: #f8fafc;
+}
+
+p {
+  margin: 8px 0;
+}
+
+.card,
+.chat-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+input[type='email'],
+input[type='text'] {
+  padding: 12px 14px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+input[type='email']:focus,
+input[type='text']:focus {
+  outline: none;
+  border-color: #60a5fa;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+button {
+  padding: 12px 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #0f172a;
+  background: #38bdf8;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-panel,
+.room-info {
+  margin-top: 18px;
+  font-size: 0.95rem;
+}
+
+.chat-box {
+  min-height: 360px;
+  max-height: 520px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #0f172a;
+}
+
+.chat-message {
+  max-width: 80%;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: #334155;
+}
+
+.chat-message.mine {
+  margin-left: auto;
+  background: #2563eb;
+}
+
+.chat-message.system {
+  background: #475569;
+  text-align: center;
+}
+
+.chat-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  opacity: 0.8;
+  font-size: 0.85rem;
+}
+
+.message-form {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.message-form input {
+  flex: 1;
+}
+
+.message-form button {
+  min-width: 120px;
+}
+
+@media (max-width: 700px) {
+  .message-form {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
