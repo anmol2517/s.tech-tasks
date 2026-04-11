@@ -1,0 +1,25 @@
+{
+  "name": "socket-io-backend",
+  "version": "1.0.0",
+  "description": "Modular Socket.IO backend for group chat with Express and MongoDB.",
+  "main": "socket-io/index.js",
+  "scripts": {
+    "start": "node socket-io/index.js",
+    "dev": "nodemon socket-io/index.js"
+  },
+  "keywords": ["socket.io", "express", "chat", "nodejs", "mongodb"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.5.3",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
