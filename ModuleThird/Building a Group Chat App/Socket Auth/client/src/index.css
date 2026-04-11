@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #eef2ff;
+  color: #111;
+}
+
+input, button {
+  font-size: 16px;
+  padding: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+}

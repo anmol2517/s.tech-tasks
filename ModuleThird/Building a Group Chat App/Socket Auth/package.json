@@ -1,0 +1,10 @@
+{
+  "name": "socket-auth-mern",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "start-backend": "cd server && npm run start",
+    "start-frontend": "cd client && npm start"
+  }
+}
