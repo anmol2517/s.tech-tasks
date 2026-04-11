@@ -1,0 +1,21 @@
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header h2,
+.chat-header p {
+  margin: 0;
+}
+
+.message-bubble {
+  word-break: break-word;
+}
+
+.chat-form input {
+  border: 1px solid #cbd5e1;
+}
+
+.chat-form button {
+  min-width: 110px;
+}

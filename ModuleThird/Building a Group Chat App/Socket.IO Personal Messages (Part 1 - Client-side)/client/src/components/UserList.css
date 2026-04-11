@@ -1,0 +1,17 @@
+.user-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-list h2 {
+  margin: 0 0 12px;
+  color: #e2e8f0;
+}
+
+.user-list li {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.user-list li:hover {
+  background: #1d4ed8;
+}
